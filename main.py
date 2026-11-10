@@ -1,122 +1,118 @@
-# Lists store subjects and study tasks while the program is running.
+
+# Store subjects and tasks
 subjects = []
 tasks = []
 
-
+# Add a new subject
 def add_subject():
-    subject_name = input("Enter the subject name: ").strip()
+    name = input("Enter subject name: ")
 
-    if subject_name == "":
+    if name == "":
         print("Subject name cannot be empty.")
-    elif subject_name in subjects:
-        print("This subject already exists.")
+    elif name in subjects:
+        print("Subject already exists.")
     else:
-        subjects.append(subject_name)
-        print("Subject added successfully!")
+        subjects.append(name)
+        print("Subject added!")
 
 
+# Show all subjects
 def view_subjects():
     if len(subjects) == 0:
-        print("No subjects added yet.")
+        print("No subjects found.")
     else:
         print("\nYour subjects:")
-        subject_number = 1
-        for subject in subjects:
-            print(str(subject_number) + ". " + subject)
-            subject_number = subject_number + 1
+        for i in range(len(subjects)):
+            print(i + 1, "-", subjects[i])
 
 
+# Add a new study task
 def add_task():
     if len(subjects) == 0:
-        print("Please add a subject first.")
-        return
+        print("Add a subject first.")
+    else:
+        name = input("Enter task name: ")
 
-    task_name = input("Enter the task name: ").strip()
-    if task_name == "":
-        print("Task name cannot be empty.")
-        return
+        if name == "":
+            print("Task name cannot be empty.")
+        else:
+            view_subjects()
 
-    view_subjects()
-    subject_choice = input("Choose a subject number: ").strip()
+            number = int(input("Choose subject number: "))
 
-    # Check that the input contains only digits before converting it.
-    if not subject_choice.isdigit():
-        print("Invalid subject number. Please enter a number from the list.")
-        return
+            if number >= 1 and number <= len(subjects):
+                subject = subjects[number - 1]
 
-    subject_number = int(subject_choice)
-    if subject_number < 1 or subject_number > len(subjects):
-        print("Invalid subject number. Please enter a number from the list.")
-        return
+                # Each task has a name, subject and status
+                task = [name, subject, "Pending"]
+                tasks.append(task)
 
-    subject_name = subjects[subject_number - 1]
-    task = [task_name, subject_name, "Pending"]
-    tasks.append(task)
-    print("Study task added successfully!")
+                print("Task added!")
+            else:
+                print("Invalid subject number.")
 
 
+# Show all study tasks
 def view_tasks():
     if len(tasks) == 0:
-        print("No study tasks added yet.")
+        print("No tasks found.")
     else:
-        print("\nYour study tasks:")
-        task_number = 1
-        for task in tasks:
-            print(str(task_number) + ". " + task[0] + " | Subject: " + task[1] + " | Status: " + task[2])
-            task_number = task_number + 1
+        print("\nYour tasks:")
+        for i in range(len(tasks)):
+            print(i + 1, "-", tasks[i][0],
+                  "| Subject:", tasks[i][1],
+                  "| Status:", tasks[i][2])
 
 
+# Mark a task as completed
 def complete_task():
     if len(tasks) == 0:
-        print("No study tasks to complete yet.")
-        return
-
-    view_tasks()
-    task_choice = input("Enter the number of the completed task: ").strip()
-
-    if not task_choice.isdigit():
-        print("Invalid task number. Please enter a number from the list.")
-        return
-
-    task_number = int(task_choice)
-    if task_number < 1 or task_number > len(tasks):
-        print("Invalid task number. Please enter a number from the list.")
-    elif tasks[task_number - 1][2] == "Completed":
-        print("This task is already completed.")
+        print("No tasks found.")
     else:
-        tasks[task_number - 1][2] = "Completed"
-        print("Task marked as completed!")
+        view_tasks()
+
+        number = int(input("Enter task number: "))
+
+        if number >= 1 and number <= len(tasks):
+            tasks[number - 1][2] = "Completed"
+            print("Task completed!")
+        else:
+            print("Invalid task number.")
 
 
+# Count completed and pending tasks
 def show_task_counts():
-    completed_count = 0
-    pending_count = 0
+    completed = 0
+    pending = 0
 
     for task in tasks:
         if task[2] == "Completed":
-            completed_count = completed_count + 1
+            completed = completed + 1
         else:
-            pending_count = pending_count + 1
+            pending = pending + 1
 
-    print("Completed tasks: " + str(completed_count))
-    print("Pending tasks: " + str(pending_count))
+    print("Completed tasks:", completed)
+    print("Pending tasks:", pending)
 
 
+# Show the main menu
 def show_menu():
     print("\n=== Student Study Organizer ===")
     print("1. Add a new subject")
     print("2. View all subjects")
     print("3. Add a study task")
     print("4. View all study tasks")
-    print("5. Mark a task as completed")
-    print("6. Show completed and pending task counts")
+    print("5. Complete a task")
+    print("6. Show task counts")
     print("7. Exit")
 
 
+# Start the program
 def main():
     while True:
         show_menu()
-        choice = input("Choose an option (1-7): ").strip()
+
+        choice = input("Choose an option: ")
 
         if choice == "1":
             add_subject()
@@ -134,7 +130,7 @@ def main():
             print("Goodbye! Happy studying!")
             break
         else:
-            print("Invalid option. Please enter a number from 1 to 7.")
+            print("Invalid choice.")
 
 
 main()
